@@ -20,14 +20,12 @@ RUN chmod +x ./entrypoint.sh
 # COPY certificates/* /usr/local/share/ca-certificates/
 # RUN update-ca-certificates
 
+USER runner
+
+ENTRYPOINT ["./entrypoint.sh"]
+
 WORKDIR /opt/wildfly/certs
 COPY certificates/intermediate.crt /opt/wildfly/certs
 COPY certificates/rootCA.crt /opt/wildfly/certs
 RUN keytool -importcert -file intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
 RUN keytool -importcert -file rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
-
-WORKDIR /
-
-USER runner
-
-ENTRYPOINT ["./entrypoint.sh"]
