@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y curl jq && \
     apt-get install -y maven && \
     apt-get install -y wget && \
     apt-get install -y telnet && \
+    apt install openjdk-17-jdk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -16,6 +17,12 @@ RUN chmod +x ./entrypoint.sh
 
 COPY certificates/* /usr/local/share/ca-certificates/
 RUN update-ca-certificates
+
+WORKDIR /opt/wildfly/certs
+COPY certificates/intermediate.crt /opt/w/ildfly/certs
+COPY certificates/rootCA.crt /opt/w/ildfly/certs
+RUN keytool -importcert -file intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
+RUN keytool -importcert -file rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
 
 USER runner
 
