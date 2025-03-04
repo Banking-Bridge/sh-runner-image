@@ -1,4 +1,4 @@
-FROM ghcr.io/actions/actions-runner:2.321.0
+FROM ghcr.io/actions/actions-runner:2.322.0
 # for latest release, see https://github.com/actions/runner/releases
 
 USER root
@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y curl jq && \
 
 COPY github-actions-runner/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
+
+COPY certificates/* /usr/local/share/ca-certificates/
+RUN update-ca-certificates
 
 USER runner
 
