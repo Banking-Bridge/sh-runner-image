@@ -24,6 +24,8 @@ USER runner
 
 ENTRYPOINT ["./entrypoint.sh"]
 
+USER root
+
 WORKDIR /opt/wildfly/certs
 COPY certificates/intermediate.crt /opt/wildfly/certs
 COPY certificates/rootCA.crt /opt/wildfly/certs
