@@ -7,10 +7,10 @@ USER root
 RUN apt-get update && \
     apt-get install -y apt-utils && \
     apt-get install -y curl jq && \
-    apt-get install -y maven && \
     apt-get install -y wget && \
     apt-get install -y telnet && \
     apt-get install -y openjdk-17-jdk && \
+    apt-get install -y maven && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
