@@ -24,7 +24,7 @@ COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_t
 RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
 RUN keytool -importcert -file /opt/wildfly/certs/intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
 RUN keytool -importcert -file /opt/wildfly/certs/rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
-RUN keytool -importcert -file /opt/wildfly/certs/selfsignCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
+RUN keytool -importcert -file /opt/wildfly/certs/selfsignCA.crt -alias selfsignCA.crt -cacerts -storepass changeit -noprompt
 
 USER runner
 
