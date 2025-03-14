@@ -17,8 +17,8 @@ RUN apt-get update && \
 COPY github-actions-runner/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
-# COPY certificates/* /usr/local/share/ca-certificates/
-# RUN update-ca-certificates
+COPY certificates/* /usr/local/share/ca-certificates/
+RUN update-ca-certificates
 
 COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_tebank_net.crt certificates/selfsignCA.crt /opt/wildfly/certs/
 RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
