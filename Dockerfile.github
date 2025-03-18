@@ -14,29 +14,18 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y wget apt-transport-https
-RUN echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print $2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
-RUN mkdir -p /etc/apt/keyrings
-RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
-RUN apt-get update && \
-    apt-get install -y temurin-17-jdk && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# ENV JAVA_HOME /usr/lib/jvm/java-1.17.0-openjdk-amd64
-
 COPY github-actions-runner/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
-COPY certificates/* /usr/local/share/ca-certificates/
+COPY certificates/intermediate.crt certificates/rootCA.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
-COPY certificates/merged.crt /opt/wildfly/certs/
+COPY certificates/intermediate.crt certificates/rootCA.crt /opt/wildfly/certs/
 # COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_tebank_net.crt certificates/selfsignCA.crt /opt/wildfly/certs/
 # RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
 # RUN keytool -importcert -file /opt/wildfly/certs/intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
 # RUN keytool -importcert -file /opt/wildfly/certs/rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
-RUN keytool -importcert -file /opt/wildfly/certs/merged.crt -alias mergedCerts -cacerts -storepass changeit -noprompt
+# RUN keytool -importcert -file /opt/wildfly/certs/merged.crt -alias mergedCerts -cacerts -storepass changeit -noprompt
 # RUN keytool -importcert -file /opt/wildfly/certs/selfsignCA.crt -alias selfsignCA.crt -cacerts -storepass changeit -noprompt
 
 USER runner
