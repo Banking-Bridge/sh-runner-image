@@ -22,7 +22,7 @@ RUN chmod +x ./entrypoint.sh
 COPY certificates/* /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
-COPY certificates/merged.crt
+COPY certificates/merged.crt /opt/wildfly/certs/
 # COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_tebank_net.crt certificates/selfsignCA.crt /opt/wildfly/certs/
 # RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
 # RUN keytool -importcert -file /opt/wildfly/certs/intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
