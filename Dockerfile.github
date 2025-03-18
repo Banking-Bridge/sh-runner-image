@@ -14,17 +14,21 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+ENV JAVA_HOME /usr/lib/jvm/java-1.17.0-openjdk-amd64
+
 COPY github-actions-runner/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
 COPY certificates/* /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
-COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_tebank_net.crt certificates/selfsignCA.crt /opt/wildfly/certs/
-RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
-RUN keytool -importcert -file /opt/wildfly/certs/intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
-RUN keytool -importcert -file /opt/wildfly/certs/rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
-RUN keytool -importcert -file /opt/wildfly/certs/selfsignCA.crt -alias selfsignCA.crt -cacerts -storepass changeit -noprompt
+COPY certificates/merged.crt
+# COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_tebank_net.crt certificates/selfsignCA.crt /opt/wildfly/certs/
+# RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
+# RUN keytool -importcert -file /opt/wildfly/certs/intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
+# RUN keytool -importcert -file /opt/wildfly/certs/rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
+RUN keytool -importcert -file /opt/wildfly/certs/merged.crt -alias mergedCerts -cacerts -storepass changeit -noprompt
+# RUN keytool -importcert -file /opt/wildfly/certs/selfsignCA.crt -alias selfsignCA.crt -cacerts -storepass changeit -noprompt
 
 USER runner
 
