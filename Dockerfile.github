@@ -1,9 +1,8 @@
-FROM ghcr.io/actions/actions-runner:2.322.0
+FROM ghcr.io/actions/actions-runner:2.330.0
 # for latest release, see https://github.com/actions/runner/releases
 
 USER root
 
-# install curl and jq
 RUN apt-get update && \
     apt-get install -y apt-utils && \
     apt-get install -y curl jq && \
@@ -11,6 +10,7 @@ RUN apt-get update && \
     apt-get install -y telnet && \
     apt-get install -y openjdk-17-jdk && \
     apt-get install -y maven && \
+    apt-get install -y azure-cli && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -21,12 +21,6 @@ COPY certificates/intermediate.crt certificates/rootCA.crt /usr/local/share/ca-c
 RUN update-ca-certificates
 
 COPY certificates/intermediate.crt certificates/rootCA.crt /opt/wildfly/certs/
-# COPY certificates/intermediate.crt certificates/rootCA.crt certificates/bridge_tebank_net.crt certificates/selfsignCA.crt /opt/wildfly/certs/
-# RUN keytool -importcert -file /opt/wildfly/certs/bridge_tebank_net.crt -alias bridge_tebank_net.crt -cacerts -storepass changeit -noprompt
-# RUN keytool -importcert -file /opt/wildfly/certs/intermediate.crt -alias intermediate.crt -cacerts -storepass changeit -noprompt
-# RUN keytool -importcert -file /opt/wildfly/certs/rootCA.crt -alias rootCA.crt -cacerts -storepass changeit -noprompt
-# RUN keytool -importcert -file /opt/wildfly/certs/merged.crt -alias mergedCerts -cacerts -storepass changeit -noprompt
-# RUN keytool -importcert -file /opt/wildfly/certs/selfsignCA.crt -alias selfsignCA.crt -cacerts -storepass changeit -noprompt
 
 USER runner
 
