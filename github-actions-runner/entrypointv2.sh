@@ -42,7 +42,8 @@ INSTALLATION_TOKEN="$(curl --request POST \
 --url "https://api.github.com/app/installations/$INSTALLATION_ID/access_tokens" \
 --header "Accept: application/vnd.github+json" \
 --header "Authorization: Bearer $JWT" \
---header "X-GitHub-Api-Version: 2022-11-28")"
+--header "X-GitHub-Api-Version: 2022-11-28" \
+  | jq -r '.token')"
 
 printf '%s\n' "INSTALLATION TOKEN: $INSTALLATION_TOKEN"
 
