@@ -36,13 +36,12 @@ signature=$(
 # Create JWT
 JWT="${header_payload}"."${signature}"
 printf '%s\n' "JWT: $JWT"
-
-printf '%s\n' "PEM: $( cat /tmp/key.pem)"
+printf '%s\n' "INSTALLATION_ID: $INSTALLATION_ID"
 
 INSTALLATION_TOKEN="$(curl --request POST \
---url "https://api.github.com/app/installations/${INSTALLATION_ID}/access_tokens" \
+--url "https://api.github.com/app/installations/$INSTALLATION_ID/access_tokens" \
 --header "Accept: application/vnd.github+json" \
---header "Authorization: Bearer {$JWT}" \
+--header "Authorization: Bearer $JWT" \
 --header "X-GitHub-Api-Version: 2022-11-28")"
 
 printf '%s\n' "INSTALLATION TOKEN: $INSTALLATION_TOKEN"
@@ -50,7 +49,7 @@ printf '%s\n' "INSTALLATION TOKEN: $INSTALLATION_TOKEN"
 # Retrieve a short lived runner registration token using the PAT
 REGISTRATION_TOKEN="$(curl -X POST -fsSL \
   -H 'Accept: application/vnd.github.v3+json' \
-  -H "Authorization: Bearer ${INSTALLATION_TOKEN}" \
+  -H "Authorization: Bearer $INSTALLATION_TOKEN" \
   -H 'X-GitHub-Api-Version: 2022-11-28' \
   "$REGISTRATION_TOKEN_API_URL" \
   | jq -r '.token')"
