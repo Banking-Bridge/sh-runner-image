@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -l
+#!/usr/bin/env bash
 set -e
 
 client_id=$GITHUB_APP_CLIENT_ID
