@@ -37,6 +37,8 @@ signature=$(
 JWT="${header_payload}"."${signature}"
 printf '%s\n' "JWT: $JWT"
 
+printf '%s\n' "PEM: $( cat /tmp/key.pem)"
+
 INSTALLATION_TOKEN="$(curl --request POST \
 --url "https://api.github.com/app/installations/${INSTALLATION_ID}/access_tokens" \
 --header "Accept: application/vnd.github+json" \
