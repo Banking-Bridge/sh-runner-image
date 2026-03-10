@@ -35,8 +35,6 @@ signature=$(
 
 # Create JWT
 JWT="${header_payload}"."${signature}"
-printf '%s\n' "JWT: $JWT"
-printf '%s\n' "INSTALLATION_ID: $INSTALLATION_ID"
 
 INSTALLATION_TOKEN="$(curl --request POST \
 --url "https://api.github.com/app/installations/$INSTALLATION_ID/access_tokens" \
@@ -44,8 +42,6 @@ INSTALLATION_TOKEN="$(curl --request POST \
 --header "Authorization: Bearer $JWT" \
 --header "X-GitHub-Api-Version: 2022-11-28" \
   | jq -r '.token')"
-
-printf '%s\n' "INSTALLATION TOKEN: $INSTALLATION_TOKEN"
 
 # Retrieve a short lived runner registration token using the PAT
 REGISTRATION_TOKEN="$(curl -X POST -fsSL \
@@ -55,6 +51,4 @@ REGISTRATION_TOKEN="$(curl -X POST -fsSL \
   "$REGISTRATION_TOKEN_API_URL" \
   | jq -r '.token')"
 
-printf '%s\n' "REGISTRATION TOKEN: $REGISTRATION_TOKEN"
-
-./config.sh --url $GH_URL --token $REGISTRATION_TOKEN --unattended --ephemeral && ./run.sh
+./config.sh --url $GH_URL --token $REGISTRATION_TOKEN --labels $LABELS --unattended --ephemeral && ./run.sh
